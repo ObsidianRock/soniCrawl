@@ -12,7 +12,16 @@ class MongoQueue:
         self.db = self.client.cache2
         self.timeout = timeout
 
+    def __bool__(self):
 
+        record = self.db.crawl_queue.find_one(
+
+            {'status': {'$ne': self.COMPLETE}}
+        )
+        #$ne selects the documents where the value of the field is not equal
+        #(i.e. !=) to the specified value
+
+        return True if record else False
 
     def push(self, url):
         try:
@@ -48,6 +57,8 @@ class MongoQueue:
         if record:
             print('Released:', record['_id'])
 
+    def complete(self, url):
+        self.db.crawl_queue.update({'_id': url}, {'$set': {'status': self.COMPLETE}})
 
     def peek(self):
         item = self.db.crawl_queue.find_one({'status': self.OUTSTANDING})
