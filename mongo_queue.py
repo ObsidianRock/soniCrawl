@@ -17,3 +17,12 @@ class MongoQueue:
             self.db.crawl_queue.insert({'_id': url, 'status': self.OUTSTANDING})
         except errors.DuplicateKeyError as e:
             pass
+
+    def peek(self):
+        item = self.db.crawl_queue.find_one({'status': self.OUTSTANDING})
+        if item:
+            return item['_id']
+
+
+    def clear(self):
+        self.db.crawl_queue.drop()
