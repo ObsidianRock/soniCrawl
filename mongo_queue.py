@@ -1,6 +1,6 @@
 
-from pymongo import MongoClient
-from datetime import timedelta
+from pymongo import MongoClient, errors
+from datetime import timedelta, datetime
 
 class MongoQueue:
 
