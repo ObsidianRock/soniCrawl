@@ -22,4 +22,23 @@ class MongoCache:
         self.db.webpage.update({'_id': url},
                                {'$set': record},
                                upsert=True)
-        
+
+    def __getitem__(self, url):
+
+        record = self.db.webpage.find_one({'_id': url})
+
+        if record:
+            return pickle.loads(zlib.decompress(record['result']))
+        else:
+            raise KeyError(url + ' does not exist')
+
+    def __contains__(self, url):
+        try:
+            self[url]
+        except KeyError:
+            return False
+        else:
+            return True
+
+    def clear(self):
+        self.db.webpage.drop()
