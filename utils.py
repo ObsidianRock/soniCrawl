@@ -9,3 +9,7 @@ def get_robot_txt(url):
     rp.set_url(parse.urljoin(url, '/robot.txt'))
     rp.read()
     return rp
+
+def normalize(seed_url, link):
+    link, _ = parse.urldefrag(link) # remove hash to avoid duplicates
+    return parse.urljoin(seed_url, link)
