@@ -1,0 +1,19 @@
+from link_crawler import link_crawler
+
+from mongo_queue import MongoQueue
+from mongo_cache import MongoCache
+
+def main():
+
+    crawl_queue = MongoQueue()
+    cache = MongoCache()
+    scrape_callback = None
+
+    seed_url = ''
+
+    link_crawler(seed_url, crawl_queue, scrape_callback, cache)
+
+                 
+if __name__ == '__main__':
+
+    main()

@@ -1,6 +1,5 @@
 from urllib import parse, robotparser
 
-
 def same_domain(url1, url2):
     return parse.urlparse(url1).netloc == parse.urlparse(url2).netloc
 
