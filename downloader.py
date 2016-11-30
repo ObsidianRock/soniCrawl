@@ -1,4 +1,6 @@
 
+import requests
+
 
 class Downloader:
 
@@ -26,3 +28,19 @@ class Downloader:
                 self.cache[url] = result['html']
 
         return result['html']
+
+    def download(self, url, num_retries):
+        print('Downloading ' + url)
+        try:
+            request = requests.get(url, timeout=self.timeout)
+            html = request.text
+            request.raise_for_status()
+        except Exception as e:
+            err = str(e)
+            code = int(err.split(' ')[0])
+            html = ''
+            if num_retries > 0 and 500 <= code < 600:
+                # retry 5XX HTTP errors
+                return self.download(url, num_retries - 1)
+
+        return {'html': html}
